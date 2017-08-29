@@ -1,0 +1,8 @@
+<ul style="margin-top: 10px;">
+{% for ProductCategory in Product.ProductCategories %}
+    {% set Category = ProductCategory.Category %}
+    <li id="product_tag_box__product_tag--{{ ProductCategory.CategoryId }}" style="display:inline-block; padding-right: 10px;">
+        {{ Category.name }}
+    </li>
+{% endfor %}
+</ul>

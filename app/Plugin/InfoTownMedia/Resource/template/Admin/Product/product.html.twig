@@ -1,0 +1,270 @@
+{# This file is part of InfoTownMedia Plugin of EC-CUBE
+
+Copyright(c) 2015- Hiroshi Sawai All Rights Reserved.
+
+http://www.info-town.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+
+{# app/Plugin/InfoTownMedia/Resource/template/Admin/Product/product.html.twig #}
+{% block stylesheet %}
+    <style>
+        .ui-dialog {
+            z-index: 999;
+        }
+
+        #infoTownMedia {
+            display: none;
+        }
+
+        .tab-pane {
+            padding: 2em 0;
+        }
+
+        #itmDescription p, #itmDescription ul {
+            margin-bottom: 1em;
+        }
+
+        #itmBrowserMain {
+            height: 16em;
+            overflow: scroll;
+            margin: 1em 0;
+            padding: 1em;
+            border: 1px dotted #ddd;
+        }
+
+        #itmUploaderView {
+            padding: 1em;
+            margin: 1em 0;
+            width: 100%;
+            min-height: 10em;
+            border: 1px dotted #ddd;
+            overflow: scroll;
+        }
+
+        #itmBrowserSelectedPreview {
+            max-width: 220px;
+            height: auto;
+            margin: 1em 0;
+        }
+
+        #itmBrowserSelectedPreview img {
+            max-width: 100%;
+        }
+
+        #itmBrowserSelectedImgWidth, #itmBrowserSelectedImgHeight {
+            width: 4em;
+
+        }
+
+        .itmBrowserThumbnail {
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        .itmOpenDialog {
+            margin: 0.5rem 1rem;
+        }
+
+        /* Override jQuery UI default font-style */
+        .ui-widget {
+            font-size: 16px !important;
+        }
+        #itmBrowserPager {
+            text-align: center;
+        }
+        #itmBrowserPager span {
+            color: #0b97c4;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+
+    <div class="row">
+        <div id="infoTownMedia" title="InfoTownMedia 画像追加">
+            <input type="hidden" name="itmToken" value="{{ itmToken }}">
+
+            <div>
+                {# Silex flash message #}
+                {% for message in app.session.flashbag.get('infotown_media_message') %}
+                    <div class="row">
+                        <div class="col-lg-12 alert">
+                            {{ message }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <ul id="itmTab" class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="" aria-controls="itmDescription" role="tab" data-toggle="tab">
+                                画像について
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="" aria-controls="itmLibrary" role="tab" data-toggle="tab">
+                                メディアライブラリ
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="" aria-controls="itmUploader" role="tab" data-toggle="tab">
+                                ファイルをアップロード
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- #itmTab -->
+                    <div id="itmContent" class="tab-content">
+                        <div id="itmDescription" class="tab-pane active" role="tabpanel">
+                            <div class="col-lg-12">
+                                <h4>フリーエリアへ画像を挿入する手順</h4>
+                                <ul>
+                                    <li>1 画像を挿入する位置へフリーエリアのカーソルを移動します。</li>
+                                    <li>2 「画像を追加」ボタンで当ダイアログを表示します。</li>
+                                    <li>3「メディアライブラリ」タブの「EC-CUBE3の画像を読み込む」ボタンで保存済み画像を読み込みます。</li>
+                                    <li>4 読み込んだ画像から挿入する画像を選択します。</li>
+                                    <li>
+                                        5 「画像を挿入」ボタンをクリックします。<br>
+                                        フリーエリアへドラッグ&amp;ドロップしても挿入できます。
+                                    </li>
+                                </ul>
+                                <p>
+                                    またプラグインInfoTownLinkWpをインストール・有効化済みの場合、<br>
+                                    「WordPressの画像を読み込む」でメディアライブラリへ表示することができます。
+                                </p>
+                                <h4>画像アップロード</h4>
+                                <p>
+                                    新規画像を「ファイルをアップロード」タブから新規の画像をEC-CUBE3へ保存できます。<br>
+                                    保存した画像は「メディアライブラリ」タブの「EC-CUBE3の画像を読込」ボタンで確認できます。<br>
+                                    <span class="text-info">
+                                        「ファイルをアップロード」タブでEC-CUBE3へ保存したGIF画像はPNG形式へ変換されます。
+                                    </span>
+                                </p>
+                                <h5>InfoTownLinkWpをご利用の皆様へ</h5>
+                                <p class="text-info">
+                                    InfoTownLinkWpで発行したWordPressの投稿取得タグは<br>
+                                    フリーエリアの「ソース」メニューでフォーマットを切り替えHTMLのコメントとして挿入してください。
+                                </p>
+                            </div>
+                        </div>
+                        <!-- #itmDescription -->
+                        <div id="itmLibrary" class="tab-pane" role="tabpanel">
+                            <div class="col-lg-12">
+                                <p>
+                                    <button id="itmLoadCubeMedia" class="btn btn-default btn-xs">
+                                        EC-CUBE3の画像を読込
+                                    </button>
+                                    {% if (app['linkwp.wp_api_get'] is defined) %}
+                                        <button id="itmLoadWpMedia" class="btn btn-default btn-xs">
+                                            WordPressの画像を読込
+                                        </button>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <p>
+                                表示された画像はドラッグ&amp;ドロップでフリーエリアのエディタへ挿入できます。
+                            </p>
+
+                            <div id="itmBrowser" class="col-lg-12">
+                                <div id="itmBrowserMessage" class="col-lg-12 alert"></div>
+                                <div id="itmBrowserMain" class="col-lg-12"></div>
+                                <div id="itmBrowserPager"></div>
+                                <div id="itmBrowserTool" class="col-lg-12">
+                                    <div id="itmBrowserSelectedPreview"></div>
+                                    <div class="form-inline">
+                                        <p>
+                                            挿入形式&nbsp;
+                                            <input type="radio" name="itmInsertFormat" value="path" checked> 絶対パス
+                                            &nbsp;<input type="radio" name="itmInsertFormat" value="url"> URL
+                                        </p>
+                                        <p>
+                                            横: <input class="form-inline form-control" type="text"
+                                                      id="itmBrowserSelectedImgWidth">
+                                            縦: <input class="form-inline form-control" type="text"
+                                                      id="itmBrowserSelectedImgHeight">
+                                            代替的テキスト: <input class="form-inline form-control" type="text"
+                                                            id="itmBrowserSelectedImgAlt">
+                                            <button id="itmInsertMedia" class="btn btn-primary btn-xs">
+                                                画像を挿入
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- #itmBrowser -->
+                        </div>
+                        <!-- #itmLibrary -->
+                        <div id="itmUploader" class="tab-pane" role="tabpanel">
+                            <div class="col-lg-12">
+                                <p>
+                                    <input id="itmSelectMedia" name="itmSelectMedia" type="file"
+                                           value="画像アップロード">
+                                </p>
+                                <p>JPEG,PNGファイルをドラッグアンドドロップで表示できます。</p>
+                            </div>
+                            <div id="itmUploaderView" class="view"></div>
+                            <div id="itmUploaderMessage" class="alert" role="alert"></div>
+                            <div>
+                                <p>
+                                    <button id="itmUploadMedia" class="btn btn-default btn-xs">
+                                        EC-CUBE3へ画像を保存
+                                    </button>
+                                    {% if (app['infotown.postwp.post'] is defined) %}
+                                        <button id="itmUploadMediaToWp" class="btn btn-default btn-xs">
+                                            WordPressへ画像を保存
+                                        </button>
+                                    {% endif %}
+                                    <span class="help-block">GIF形式の画像はPNG形式へ変換し保存されます。</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- #itmUploader -->
+                    </div>
+                    <!-- #itmContent -->
+                </div>
+                <!-- .col-12 -->
+            </div>
+            <!-- .form-group .row -->
+        </div>
+        <!-- #infoTownMedia -->
+    </div>
+    <!-- .row -->
+{% endblock main %}
+
+{% block javascript %}
+    {% if pluginUrl != '' %}
+        <script src="{{ pluginUrl }}infotownmedia/assets/js/infotownmedia.js"></script>
+        <script src="{{ pluginUrl }}infotownmedia/assets/js/vendor/ckeditor/ckeditor.js"></script>
+    {% else %}
+        <script src="{{ app.request.getBasePath ~ app.config.plugin_html_urlpath }}infotownmedia/assets/js/infotownmedia.js"></script>
+        <script src="{{ app.request.getBasePath ~ app.config.plugin_html_urlpath }}infotownmedia/assets/js/vendor/ckeditor/ckeditor.js"></script>
+    {% endif %}
+    <script>
+        jQuery( function () {
+            var free_area_id =
+                    document.getElementsByName('admin_product[free_area]')[0].id;
+            if ( typeof(CKEDITOR) !== "undefined" ) {
+                CKEDITOR.replace( free_area_id );
+            }
+            $( "#" + free_area_id ).before(
+                    '<p><a class="itmOpenDialog btn btn-default btn-xs">画像を追加</a></p>'
+            );
+        } );
+    </script>
+{% endblock javascript %}

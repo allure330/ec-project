@@ -1,0 +1,4 @@
+eccube.event.render.admin_product_product_new.before:
+    - [onRenderAdminProductProductNewBeforeInfoTownMedia, NORMAL]
+eccube.event.render.admin_product_product_edit.before:
+    - [onRenderAdminProductProductEditBeforeInfoTownMedia, NORMAL]

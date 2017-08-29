@@ -1,0 +1,2 @@
+admin.plugin_generator.save.complete: プラグインを作成しました。
+admin.plugin_generator.save.error: 同じcodeのプラグインが既に作成されています。

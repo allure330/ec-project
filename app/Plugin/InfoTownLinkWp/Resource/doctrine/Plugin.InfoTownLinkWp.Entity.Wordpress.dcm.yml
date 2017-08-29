@@ -1,0 +1,17 @@
+Plugin\InfoTownLinkWp\Entity\Wordpress:
+    type: entity
+    table: plg_infotown_linkwp_wordpress
+    repositoryClass: Plugin\InfoTownLinkWp\Repository\WordpressRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+    fields:
+        home_url:
+            type: text
+            nullable: true
+        api_url:
+            type: text
+            nullable: true

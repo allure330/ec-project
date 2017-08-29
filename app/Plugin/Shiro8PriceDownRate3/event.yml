@@ -1,0 +1,4 @@
+Product/list.twig:
+    - [onRenderProductList, NORMAL]
+Product/detail.twig:
+    - [onRenderProductDetail, NORMAL]

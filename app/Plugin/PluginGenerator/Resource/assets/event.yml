@@ -1,0 +1,12 @@
+eccube.event.app.before:
+  - [onAppBefore, NORMAL]
+eccube.event.app.after:
+  - [onAppAfter, NORMAL]
+eccube.event.controller.homepage.before:
+  - [onControllerBefore, NORMAL]
+eccube.event.controller.homepage.after:
+  - [onControllerAfter, NORMAL]
+eccube.event.controller.homepage.finish:
+  - [onControllerFinish, NORMAL]
+eccube.event.render.homepage.before:
+  - [onRenderBefore, NORMAL]

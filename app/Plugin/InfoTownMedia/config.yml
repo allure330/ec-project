@@ -1,0 +1,10 @@
+name: InfoTownMedia
+code: InfoTownMedia
+version: 1.0.6
+event: Event
+service:
+    - ServiceProvider
+orm.path:
+    - /Resource/doctrine
+migration.path:
+    - /Resource/doctrine/migration

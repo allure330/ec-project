@@ -1,0 +1,4 @@
+admin.order.edit.index.complete:
+    - [adminOrderEdit, NORMAL]
+eccube.event.render.admin_order_edit.before:
+    - [adminOrderEditBefore, NORMAL]

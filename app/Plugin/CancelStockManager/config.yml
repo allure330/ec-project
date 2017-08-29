@@ -1,0 +1,4 @@
+name: キャンセル時　在庫を自動で戻します
+code: CancelStockManager
+version: 1.0.2
+event: CancelStockManagerEvent

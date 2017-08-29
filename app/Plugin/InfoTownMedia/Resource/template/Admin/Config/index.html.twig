@@ -1,0 +1,83 @@
+{# This file is part of InfoTownMedia Plugin of EC-CUBE3
+
+Copyright(c) 2015- Hiroshi Sawai All Rights Reserved.
+
+http://www.info-town.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{# app/Plugin/InfoTownMedia/Resource/template/Admin/Wordpress/index.html.twig #}
+{% extends 'default_frame.twig' %}
+
+{% block title %}Media設定{% endblock %}
+
+{% block main %}
+    {% for message in app.session.getFlashBag.get('infotown_media_message') %}
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 alert alert-warning">
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="box">
+                <div class="box-header">基本設定</div>
+                <div class="box-body">
+                    <p>下記設定は多くの場合で必要ありません。EC-CUBE3のインストール環境により設定の必要があります。</p>
+                    <p class="text-warning">
+                        本機能はEC-CUBE3のプラグインディレクトリが/pluginと異なる場合に<br>
+                        pluginディレクトリのパスを取得するための設定です。
+                    </p>
+                    {% if form is defined %}
+                        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                        {{ form_widget(form._token) }}
+                        <div class="form-group row">
+                            <div class="col-lg-4">
+                                {{ form_label(form.plugin_url) }}
+                            </div>
+                            <div class="col-lg-8">
+                                {{ form_widget(form.plugin_url) }}
+                                {{ form_errors(form.plugin_url) }}
+                                <span class="help-block">
+                                    (例) http://www.example.com/cube3/html/plugin/の場合は、<br>
+                                    /cube3/html/plugin/と入力ください。
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4">
+                                {{ form_label(form.image_save_url) }}
+                            </div>
+                            <div class="col-lg-8">
+                                {{ form_widget(form.image_save_url) }}
+                                {{ form_errors(form.image_save_url) }}
+                                <p class="help-block">
+                                    (現在当機能は利用できません。今後のバージョンアップで対応予定です。)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-8">
+                                {{ form_widget(form.save) }}
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+Plugin\InfoTownMedia\Entity\Config:
+    type: entity
+    table: plg_infotown_media_config
+    repositoryClass: Plugin\InfoTownMedia\Repository\ConfigRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            id: true
+    fields:
+        image_save_url:
+            type: text
+            nullable: true
+        plugin_url:
+            type: text
+            nullable: true

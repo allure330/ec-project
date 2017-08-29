@@ -1,0 +1,76 @@
+{# This file is part of InfoTownLinkWp Plugin of EC-CUBE3
+
+Copyright(c) 2015- Hiroshi Sawai All Rights Reserved.
+
+http://www.info-town.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{# app/Plugin/InfoTownLinkWp/Resource/template/Admin/Wordpress/index.html.twig #}
+{% extends 'default_frame.twig' %}
+
+{% block title %}WordPress設定{% endblock %}
+
+{% block main %}
+    {% for message in app.session.getFlashBag.get('infotown.linkwp.message') %}
+        <div class="row">
+            {%  for message_type in app.session.getFlashBag.get('infotown.link.message_type') %}
+            <div class="col-lg-12 col-md-12 col-sm-12 alert {{ message_type }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="box">
+                <div class="box-header">WordPress基本設定</div>
+                <div class="box-body">
+                    {% if form is defined %}
+                        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                        {{ form_widget(form._token) }}
+                        <div class="form-group row">
+                            <div class="col-lg-4">
+                                {{ form_label(form.home_url) }}
+                            </div>
+                            <div class="col-lg-8">
+                                {{ form_widget(form.home_url) }}
+                                {{ form_errors(form.home_url) }}
+                                <p class="help-block">
+                                    末尾にスラッシュ(/)は含めないでください。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4">
+                                {{ form_label(form.api_url) }}
+                            </div>
+                            <div class="col-lg-8">
+                                {{ form_widget(form.api_url) }}
+                                {{ form_errors(form.api_url) }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-8">
+                                {{ form_widget(form.save) }}
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

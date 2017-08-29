@@ -1,0 +1,258 @@
+{# This file is part of InfoTownLinkWp Plugin of EC-CUBE
+
+Copyright(c) 2015- Hiroshi Sawai All Rights Reserved.
+
+http://www.info-town.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+
+{# app/Plugin/InfoTownLinkWp/Resource/template/Admin/Get/index.html.twig #}
+
+{% extends 'default_frame.twig' %}
+
+{% block stylesheet %}
+    <style>
+        #ilwEditor {
+            display: none;
+        }
+        #ilwViewer {
+            margin: 1em;
+        }
+        .margin-bottom {
+            margin-bottom: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}投稿取得タグ発行{% endblock %}
+
+{% block main %}
+    {% for message in app.session.getFlashBag.get('infotown.linkwp.message') %}
+        <div class="row">
+            {%  for message_type in app.session.getFlashBag.get('infotown.link.message_type') %}
+                <div class="col-lg-12 col-md-12 col-sm-12 alert {{ message_type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="box no-header">
+                <div class="box-body">
+                    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                    {{ form_widget(form._token) }}
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <h3><label>タグ</label></h3>
+                            <p>商品登録画面のフリーエリアへ貼付けると取得記事内容が表示できます。</p>
+                        </div>
+
+                        {% if data.tag is defined %}
+                            {% if data.tag %}
+                                <div class="has-success col-lg-12">
+                                    <input type="text" class="form-control" value="{{ data.tag }}" disabled>
+                                </div>
+                            {% else %}
+                                <div class="col-lg-12">
+                                    <input type="text" class="form-control" value="" disabled>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" value="" disabled>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if data.code is defined %}
+                        <div class="form-group row">
+                            {% if data.code == '200' %}
+                                <div class="col-lg-1 col-md-2 col-sm-12">
+                                    <h4><label>取得数</label></h4>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12 has-success">
+                                    <input type="text" class="form-control" value="{{ data.num }}" disabled>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12 has-success">
+                                    <h4><label>状況</label></h4>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12 has-success">
+                                    <input type="text" class="form-control" value="{{ data.code }}" disabled>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12">
+                                    <h4><label>結果</label></h4>
+                                </div>
+                                <div class="col-lg-7 col-md-2 col-sm-12 has-success">
+                                    <input type="text" class="form-control" value="{{ data.message }}" disabled>
+                                </div>
+                            {% else %}
+                                <div class="col-lg-1 col-md-2 col-sm-12">
+                                    <h4><label>取得数</label></h4>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12 has-warning">
+                                    <input type="text" class="form-control" value="-" disabled>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12 has-warning">
+                                    <h4><label>状況</label></h4>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12 has-warning">
+                                    <input type="text" class="form-control" value="{{ data.code }}" disabled>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-12">
+                                    <h4><label>結果</label></h4>
+                                </div>
+                                <div class="col-lg-7 col-md-2 col-sm-12 has-warning">
+                                    <input type="text" class="form-control" value="{{ data.message }}" disabled>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    <div class="row box accordion form-horizontal">
+                        <div class="box-header toggle active col-lg-12 col-md-12 col-sm-12">
+                            <h3 class="box-title">タグで取得できる内容
+                                <svg class="cb cb-angle-down icon_down">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                         xlink:href="#cb-angle-down"></use>
+                                </svg>
+                            </h3>
+                        </div>
+                        <!-- .box-header -->
+                        <div class="box-body accpanel col-lg-12 col-md-12 col-sm-12">
+                            <div>
+                                <button id="ilwEditBtn" class="btn btn-default">編集</button>
+                                <button id="ilwCloseBtn" class="btn btn-default">閉じる</button>
+                                <textarea id="ilwEditor"></textarea>
+                            </div>
+                            <div id="ilwViewer">
+                                {% if data.render is defined %}
+                                    {% for post in data.render %}
+                                        {% if data.format == 'links' %}
+                                            {{ post.link|raw }}
+                                        {% else %}
+                                            {{ post.title }}
+                                            {{ post.content|raw }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- .box-body -->
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="row margin-bottom">
+                                <div class="col-lg-5 col-md-6 col-sm-12">
+                                    <h4>{{ form_label(form.format) }}</h4>
+                                </div>
+                                <div class="col-lg-7 col-md-6 col-sm-12">
+                                    {{ form_widget(form.format) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="row margin-bottom">
+                                <div class="col-lg-5 col-md-6 col-sm-12">
+                                    <h4>{{ form_label(form.post_id) }}</h4>
+                                </div>
+                                <div class="col-lg-7 col-md-6 col-sm-12">
+                                    {{ form_widget(form.post_id) }}
+                                    {{ form_errors(form.post_id) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 margin-bottom">
+                            {{ form_widget(form.publish) }}
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-6">
+                            {{ form_widget(form.reset) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <h3>詳細条件</h3>
+                            <p>投稿取得条件を指定できます。投稿IDを指定しているときは詳細条件は適用されません。</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            {{ form_label(form.per_page) }}
+                            {{ form_widget(form.per_page) }}
+                            {{ form_errors(form.per_page) }}
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-12">
+                            {{ form_label(form.search) }}
+                            {{ form_widget(form.search) }}
+                            {{ form_errors(form.search) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 margin-bottom">
+                            {{ form_label(form.after) }}
+                            {{ form_widget(form.after) }}
+                            {{ form_errors(form.after) }}
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 margin-bottom">
+                            {{ form_label(form.before) }}
+                            {{ form_widget(form.before) }}
+                            {{ form_errors(form.before) }}
+                        </div>
+                    </div>
+                    <h3>検索条件指定</h3>
+                    <p>条件を指定したときは上記の設定は無視されます。</p>
+                    <div class="form-group row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            {{ form_label(form.filters) }}
+                            {{ form_widget(form.filters) }}
+                            {{ form_errors(form.filters) }}
+                            <p class="help-block">
+                                投稿を取得するための条件を直接記載できます(先頭に?を付けてください)。<br>
+                                (例) ?per_page=8&order=asc<br>
+                            </p>
+                            <p class="help-block">
+                                条件の詳細は下記サイトを参照してください。<br>
+                                <a target="_blank" href="http://ja.wp-api.org/reference/posts/">WP API Documentation</a>
+                            </p>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+  <script> 
+        $( "#ilwEditBtn" ).on( "click", function () {
+            var html = $( "#ilwViewer" ).html();
+            $( "#ilwEditor" ).css( {
+                "z-index": 1000,
+                "position": "absolute",
+                "top": 80,
+                "left": 0,
+                "width": "100%",
+                "height": "100%"
+            } )
+            $( "#ilwEditor" ).val( html );
+            $( "#ilwEditor" ).fadeIn( 400 );
+            return false;
+        } );
+        $( "#ilwCloseBtn" ).on( "click", function () {
+            $( "#ilwEditor" ).fadeOut( 400 );
+            return false;
+        } )
+    </script>
+{% endblock %}

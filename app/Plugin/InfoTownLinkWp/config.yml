@@ -1,0 +1,10 @@
+name: InfoTownLinkWp
+code: InfoTownLinkWp
+version: 2.0.0
+event: Event
+service:
+    - ServiceProvider
+orm.path:
+    - /Resource/doctrine
+migration.path:
+    - /Resource/doctrine/migration

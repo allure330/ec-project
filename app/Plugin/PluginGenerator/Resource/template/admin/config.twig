@@ -1,0 +1,86 @@
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['store', 'plugin', 'plugin_list'] %}
+
+{% block title %}プラグインジェネレータ{% endblock %}
+{% block sub_title %}プラグイン登録{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block main %}
+    <form class="form-horizontal" method="post" action="{{ url('plugin_PluginGenerator_config') }}">
+        {{ form_widget(form._token) }}
+        <div class="row" id="aside_wrap">
+            <div class="col-md-9">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">プラグイン設定</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body form-horizontal">
+                        <div class="form-group {% if form.name.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">プラグイン名を入力<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.name) }}
+                                {{ form_errors(form.name) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.code.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">codeを入力<span class="text-danger">*</span><br><span
+                                        class="small">(英数字で1文字目は必ず半角英字の大文字で入力してください) </span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.code) }}
+                                {{ form_errors(form.code) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.version.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">バージョンを入力<span class="text-danger">*</span><br><span
+                                        class="small">(入力形式は<br>メジャー.マイナー.パッチ(x.x.x))</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.version) }}
+                                {{ form_errors(form.version) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.author.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">作成者を入力<span class="text-danger">*</span><br><span
+                                        class="small">(作成者名や会社名を入力してください)</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.author) }}
+                                {{ form_errors(form.author) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.is_event.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4">共通イベントの設定</label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.is_event) }}
+                                {{ form_errors(form.is_event) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.is_log.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4">ログ出力のバージョン設定</label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.is_log) }}
+                                {{ form_errors(form.is_log) }}
+                            </div>
+                        </div>
+                        {{ form_row(form.admin_hookpoints) }}
+                        {{ form_row(form.front_hookpoints) }}
+                        {{ form_row(form.mail_hookpoints) }}
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+            <div class="col-md-3" id="aside_column">
+                <div id="common_box" class="col_inner">
+                    <div id="common_button_box" class="box no-header">
+                        <div id="common_button_box__body" class="box-body">
+                            <div id="common_button_box__edit_button" class="row text-center">
+                                <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                    <button class="btn btn-primary btn-block btn-lg" type="submit">設定</button>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div><!-- /.col -->
+        </div>
+    </form>
+{% endblock main %}
